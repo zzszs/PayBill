@@ -22,10 +22,21 @@ export const itemListSlice = createSlice({
                     state[i].people.push(action.payload.person)
                 }
             }
+        },
+        changePersonSlice: (state, action) => {
+            for (let i = 0; i < state.length; i++) {
+                if (state[i].id === action.payload.id) {
+                    for (let j = 0; j < state[i].people.length; j++) {
+                        if (state[i].people[j].id === action.payload.person.id) {
+                            state[i].people[j] = action.payload.person
+                        }
+                    }
+                }
+            }
         }
     }
 })
 
-export const { addItem, addPersonToItem } = itemListSlice.actions
+export const { addItem, addPersonToItem, changePersonSlice } = itemListSlice.actions
 
 export default itemListSlice.reducer

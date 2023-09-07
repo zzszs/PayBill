@@ -22,3 +22,15 @@
     background-color: #ffffff;
     border-radius: inherit;
 }
+
+.error {
+    color: red;
+    transition: all ease-in-out .3s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.error_visible {
+    opacity: 1;
+    visibility: visible;
+}
