@@ -1,11 +1,33 @@
-import { createSlice, createSelector, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createSelector,
+  PayloadAction,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
 import { Person } from "../../types/types";
 import { RootState } from "../store";
+import axios from "axios";
 
-const initialState: {data: Person[], status: 'idle' | 'loading' | 'success' | 'fail', error: string | null} = {
-    data: [],
-    status: 'idle',
-    error: null
+const POST_URL = "https://63e3e2d765ae49317719e670.mockapi.io/api/v1/users";
+
+export const postPerson = createAsyncThunk(
+  "person/add",
+  async (name: string) => {
+    try {
+      const res = await axios.post(POST_URL, {
+        name,
+      });
+
+      return res.data;
+    } catch (err: any) {
+      return err.message;
+    }
+  }
+);
+
+const initialState: { data: Person[]; status: "ready" | "loading" } = {
+  data: [],
+  status: "ready",
 };
 
 export const peopleSlice = createSlice({
@@ -23,6 +45,20 @@ export const peopleSlice = createSlice({
 
       state.data.push(newPerson);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(postPerson.pending, (state, _action) => {
+      state.status = "loading";
+    });
+    builder.addCase(postPerson.fulfilled, (state, action) => {
+      state.status = "ready";
+      const person = { ...action.payload, price: 0 };
+
+      state.data.push(person);
+    });
+    builder.addCase(postPerson.rejected, (_state, action) => {
+      console.log(action.payload);
+    });
   },
 });
 
@@ -51,7 +87,7 @@ export const getPersonsForItem = createSelector(
 export const getPersonsForTable = createSelector(
   [(state: RootState) => state.people, (state: RootState) => state.itemList],
   (people, itemList) => {
-    const {data} = people
+    const { data } = people;
     const peopleArray = [];
     for (let i = 0; i < data.length; i++) {
       const priceArray = [];
@@ -62,7 +98,9 @@ export const getPersonsForTable = createSelector(
           }
         }
       }
-      const sum = !!priceArray.length ? priceArray.reduce((acc, value) => acc + value) : 0;
+      const sum = !!priceArray.length
+        ? priceArray.reduce((acc, value) => acc + value)
+        : 0;
       peopleArray.push({
         id: data[i].id,
         key: data[i].id,
