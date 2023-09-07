@@ -10,7 +10,7 @@ const DefaultLayout: React.FC <{children: React.ReactNode}>= ({children}) => {
         <Menu 
           theme='dark' 
           mode='horizontal'
-          items={[{key: 1, label: 'Home'}, {key: 2, label: 'Groups'}]} 
+          items={[{key: 1, label: 'PayBill'}, {key: 2, label: 'Groups'}]} 
         />
       </Header>
       <Content>
