@@ -1,10 +1,9 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Table } from 'antd' 
-import { StoreType } from '../../../types/types'
+import { useAppSelector } from '../../../app/hooks'
 
 const PayBillTable: React.FC = () => {
-    const people = useSelector((state: StoreType) => state.people)
+    const people = useAppSelector((state) => state.people)
 
     const columns = [
         {

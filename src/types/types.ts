@@ -7,12 +7,8 @@ export interface Person {
 }
 
 export interface ListItem {
+    id: string,
     name: string,
     price: number,
-    people: Person[]
-}
-
-export type StoreType = {
-    itemList: ListItem[],
     people: Person[]
 }

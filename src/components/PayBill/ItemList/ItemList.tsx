@@ -1,11 +1,10 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Row } from 'antd'
 import ItemCard from '../../Global/ItemCard/ItemCard'
-import { StoreType } from '../../../types/types'
+import { useAppSelector } from '../../../app/hooks'
 
 const ItemList: React.FC = () => {
-    const itemsList = useSelector((state: StoreType) => state.itemList)
+    const itemsList = useAppSelector((state) => state.itemList)
    
   return (
     <Row>

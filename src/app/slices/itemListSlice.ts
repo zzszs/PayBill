@@ -9,15 +9,23 @@ export const itemListSlice = createSlice({
     reducers: {
         addItem: (state, action) => {
             const newItem: ListItem = {
+                id: `${new Date()}`,
                 name: action.payload.name,
                 price: parseFloat(action.payload.price),
                 people: []
             }
             state.push(newItem)
+        },
+        addPersonToItem: (state, action) => {
+            for (let i = 0; i < state.length; i++) {
+                if (state[i].id === action.payload.id) {
+                    state[i].people.push(action.payload.person)
+                }
+            }
         }
     }
 })
 
-export const { addItem } = itemListSlice.actions
+export const { addItem, addPersonToItem } = itemListSlice.actions
 
 export default itemListSlice.reducer
