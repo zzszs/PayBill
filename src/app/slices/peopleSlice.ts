@@ -1,7 +1,6 @@
 import {
   createSlice,
   createSelector,
-  PayloadAction,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { Person } from "../../types/types";
@@ -34,7 +33,7 @@ export const peopleSlice = createSlice({
   name: "addPerson",
   initialState,
   reducers: {
-    addPerson: (state, action: PayloadAction<{ name: string }>) => {
+    addPerson: (state, action) => {
       const newPerson: Person = {
         createdAt: `${new Date()}`,
         name: action.payload.name,
@@ -45,6 +44,13 @@ export const peopleSlice = createSlice({
 
       state.data.push(newPerson);
     },
+    removePerson: (state, action) => {
+      const newData = state.data.filter((person) => person.id !== action.payload.id)
+      return state = {
+        status: "ready",
+        data: newData
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(postPerson.pending, (state, _action) => {
@@ -62,7 +68,7 @@ export const peopleSlice = createSlice({
   },
 });
 
-export const { addPerson } = peopleSlice.actions;
+export const { addPerson, removePerson } = peopleSlice.actions;
 
 export default peopleSlice.reducer;
 
@@ -106,7 +112,8 @@ export const getPersonsForTable = createSelector(
         key: data[i].id,
         name: data[i].name,
         iban: data[i].iban,
-        price: sum,
+        price: `${sum}$`,
+        action: 'action'
       });
     }
     return peopleArray;

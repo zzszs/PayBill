@@ -1,17 +1,17 @@
 import React from 'react'
-import { Row } from 'antd'
-import ItemCard from '../../Global/ItemCard/ItemCard'
+import ItemCard from '../ItemCard/ItemCard'
 import { useAppSelector } from '../../../app/hooks'
+import style from './style.module.css'
 
 const ItemList: React.FC = () => {
     const itemsList = useAppSelector((state) => state.itemList)
    
   return (
-    <Row>
+    <div className={style.container}>
         {itemsList.map((item, index) => (
             <ItemCard item={item} key={index} />
         ))}
-    </Row>
+    </div>
   )
 }
 

@@ -10,5 +10,9 @@ export interface ListItem {
     id: string,
     name: string,
     price: number,
-    people: Person[]
+    people: Person[],
+    error: {
+        text: string,
+        visible: boolean
+    }
 }

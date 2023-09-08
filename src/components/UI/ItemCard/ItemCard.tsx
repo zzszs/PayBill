@@ -4,7 +4,8 @@ import { Select, Button, InputNumber } from "antd";
 import { ListItem, Person } from "../../../types/types";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { getPersonsForItem } from "../../../app/slices/peopleSlice";
-import { addPersonToItem, changePersonSlice } from "../../../app/slices/itemListSlice";
+import { addPersonToItem, changePersonPrice, removeItem, removePersonFromItem } from "../../../app/slices/itemListSlice";
+import DeleteButton from "../DeleteButton/DeleteButton";
 
 const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
   const dispatch = useAppDispatch();
@@ -25,21 +26,34 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
 
   const updatePersonPrice = () => {
     if (personPrice) {
-      dispatch(changePersonSlice({id: item.id, person: personPrice}))
+      dispatch(changePersonPrice({id: item.id, person: personPrice}))
       setPersonPrice(null)
     }
   };
 
+  const deletePersonFromItem = (value: string) => {
+    if (confirm(`Are you sure you want to remove this person, from ${item.name}`)) {
+      dispatch(removePersonFromItem({id: item.id, personId: value}))
+    }
+  }
+
+  const deleteItem = () => {
+    console.log(item.id)
+    if (confirm(`Are you sure you want to delete ${item.name}`)) {
+      dispatch(removeItem({id: item.id}))
+    }
+  }
 
   return (
     <div className={style.container}>
       <div className={style.title}>
         <p>{item.name}</p>
         <p>{item.price}$</p>
+        <DeleteButton onClick={deleteItem} />
       </div>
       <div className={style.inner_container}>
         {item.people.map((person) => (
-          <div key={person.id}>
+          <div className={style.person_contaienr} key={person.id}>
             <InputNumber
               addonAfter="$"
               min={0}
@@ -52,7 +66,8 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
               }
               onBlur={updatePersonPrice}
             />
-            <p>{person.name}</p>
+            <p className={style.person_name}>{person.name}</p>
+            <DeleteButton onClick={() => deletePersonFromItem(person.id)}/>
           </div>
         ))}
         <Select
@@ -62,6 +77,7 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
         />
         <Button onClick={addPerson}>Add</Button>
       </div>
+      <div className={`${style.error} ${item.error.visible ? style.error_visible : ''}`}>{item.error.text}</div>
     </div>
   );
 };

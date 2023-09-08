@@ -3,6 +3,9 @@
     flex-direction: column;
     border: 1px solid #cccccc;
     border-radius: 10px;
+    margin: 5px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .title {
@@ -23,6 +26,17 @@
     border-radius: inherit;
 }
 
+.person_contaienr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.person_name {
+    margin: 0 10px;
+}
+
 .error {
     color: red;
     transition: all ease-in-out .3s;
@@ -33,4 +47,11 @@
 .error_visible {
     opacity: 1;
     visibility: visible;
+}
+
+@media (min-width: 595px) {
+    .container {
+        width: auto;
+        margin-bottom: 5px;
+    }
 }

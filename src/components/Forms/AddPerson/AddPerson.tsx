@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, Button } from "antd";
 import { postPerson } from "../../../app/slices/peopleSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import style from './style.module.css'
 
 const AddPerson: React.FC = () => {
   const [form] = Form.useForm();
@@ -14,7 +15,7 @@ const AddPerson: React.FC = () => {
   };
 
   return (
-    <Form form={form} name="personForm" onFinish={onFinish}>
+    <Form className={style.form} form={form} name="personForm" onFinish={onFinish}>
       <Form.Item
         label="Person Name"
         name="name"
@@ -22,7 +23,7 @@ const AddPerson: React.FC = () => {
       >
         <Input placeholder="Person Name" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item className={style.form_button_container}>
         <Button
           htmlType="submit"
           type="primary"

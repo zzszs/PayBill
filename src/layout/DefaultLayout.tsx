@@ -1,26 +1,16 @@
-import React from 'react'
-import {Layout, Menu} from 'antd'
+import React from "react";
+import style from "./style.module.css";
+import logo_small from "../assets/logo_small.jpg";
 
-const DefaultLayout: React.FC <{children: React.ReactNode}>= ({children}) => {
-  const { Header, Content, Footer } = Layout
-
+const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   return (
-    <Layout className='layout'>
-      <Header>
-        <Menu 
-          theme='dark' 
-          mode='horizontal'
-          items={[{key: 1, label: 'PayBill'}]} 
-        />
-      </Header>
-      <Content>
-        {children}
-      </Content>
-      <Footer style={{marginTop: 'auto'}}>
-        Footer
-      </Footer>
-    </Layout>
-  )
-}
+    <div className={style.container}>
+      <img src={logo_small} alt="logo" className={style.logo} />
+      {children}
+    </div>
+  );
+};
 
-export default DefaultLayout
+export default DefaultLayout;

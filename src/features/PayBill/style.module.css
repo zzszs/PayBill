@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 25px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+@media (min-width: 595px) {
+    .group {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+}

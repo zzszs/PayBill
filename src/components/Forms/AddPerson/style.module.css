@@ -1,0 +1,18 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 100%;
+    flex: 1;
+}
+
+.form_button_container {
+    margin-top: auto;
+}
+
+@media (min-width: 595px) {
+    .form {
+        width: auto;
+    }
+} 
+

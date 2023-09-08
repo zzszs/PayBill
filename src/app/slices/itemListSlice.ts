@@ -1,42 +1,80 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { ListItem } from '../../types/types'
+import { createSlice, nanoid  } from "@reduxjs/toolkit";
+import { ListItem } from "../../types/types";
 
-const initialState: ListItem[] = [] 
+const initialState: ListItem[] = [];
 
 export const itemListSlice = createSlice({
-    name: 'itemList',
-    initialState,
-    reducers: {
-        addItem: (state, action) => {
-            const newItem: ListItem = {
-                id: `${new Date()}`,
-                name: action.payload.name,
-                price: parseFloat(action.payload.price),
-                people: []
-            }
-            state.push(newItem)
+  name: "itemList",
+  initialState,
+  reducers: {
+    addItem: (state, action) => {
+      const newItem: ListItem = {
+        id: nanoid(),
+        name: action.payload.name,
+        price: parseFloat(action.payload.price),
+        people: [],
+        error: {
+          text: "Total price is lower than price of the item",
+          visible: false,
         },
-        addPersonToItem: (state, action) => {
-            for (let i = 0; i < state.length; i++) {
-                if (state[i].id === action.payload.id) {
-                    state[i].people.push(action.payload.person)
-                }
-            }
-        },
-        changePersonSlice: (state, action) => {
-            for (let i = 0; i < state.length; i++) {
-                if (state[i].id === action.payload.id) {
-                    for (let j = 0; j < state[i].people.length; j++) {
-                        if (state[i].people[j].id === action.payload.person.id) {
-                            state[i].people[j] = action.payload.person
-                        }
-                    }
-                }
-            }
+      };
+      state.push(newItem);
+    },
+    removeItem: (state, action) => {
+      return state.filter((item) => item.id !== action.payload.id)
+    },
+    addPersonToItem: (state, action) => {
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          state[i].people.push(action.payload.person);
         }
-    }
-})
+      }
+    },
+    removePersonFromItem: (state, action) => {
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          state[i].people = state[i].people.filter((person) => person.id !== action.payload.personId)
+        }
+      }
+    },
+    removePersonFromAllItems: (state, action) => {
+      for (let i = 0; i < state.length; i++) {
+        state[i].people = state[i].people.filter((person) => person.id !== action.payload.id)
+      }
+    },
+    changePersonPrice: (state, action) => {
+      const allPrices = [];
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          for (let j = 0; j < state[i].people.length; j++) {
+            if (state[i].people[j].id === action.payload.person.id) {
+              state[i].people[j] = action.payload.person;
+            }
+            allPrices.push(state[i].people[j].price);
+          }
+          const sum = allPrices.reduce((acc, value) => acc + value);
+          if (sum < state[i].price) {
+            state[i].error = {
+              text: "Total price is lower than price of the item",
+              visible: true,
+            };
+          }
+          if (sum > state[i].price) {
+            state[i].error = {
+              text: "Total price is higher than price of the item",
+              visible: true,
+            };
+          }
+          if (sum === state[i].price) {
+            state[i].error = { ...state[i].error, visible: false };
+          }
+        }
+      }
+    },
+  },
+});
 
-export const { addItem, addPersonToItem, changePersonSlice } = itemListSlice.actions
+export const { addItem, removeItem, addPersonToItem, removePersonFromItem, removePersonFromAllItems, changePersonPrice } =
+  itemListSlice.actions;
 
-export default itemListSlice.reducer
+export default itemListSlice.reducer;
