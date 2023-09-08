@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { Person } from "../../types/types";
 import { RootState } from "../store";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const POST_URL = "https://63e3e2d765ae49317719e670.mockapi.io/api/v1/users";
 
@@ -18,7 +18,8 @@ export const postPerson = createAsyncThunk(
       });
 
       return res.data;
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as AxiosError
       return err.message;
     }
   }

@@ -8,6 +8,8 @@ import {
 } from "../../../app/slices/peopleSlice";
 import DeleteButton from "../DeleteButton/DeleteButton";
 import { removePersonFromAllItems } from "../../../app/slices/itemListSlice";
+import type { ColumnsType } from 'antd/es/table';
+import { PayBillTableCols } from "../../../types/types";
 
 const PayBillTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,13 +22,14 @@ const PayBillTable: React.FC = () => {
     }
   };
 
-  const columns = [
+  const columns: ColumnsType<PayBillTableCols> = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       sorter: {
-        compare: (a: any, b: any) => {
+        compare: (a, b) => {
+          console.log(a)
           if (a.name < b.name) return -1;
           if (b.name < a.name) return 1;
           return 0;
@@ -38,7 +41,7 @@ const PayBillTable: React.FC = () => {
       dataIndex: "price",
       key: "price",
       sorter: {
-        compare: (a: any, b: any) => {
+        compare: (a, b) => {
           const firstPrice = parseFloat(a.price.replace("$", ""));
           const secondPrice = parseFloat(b.price.replace("$", ""));
 
@@ -56,7 +59,7 @@ const PayBillTable: React.FC = () => {
       dataIndex: "action",
       key: "action",
       align: "right" as AlignType,
-      render: (_a: string, b: any) => {
+      render: (_a: string, b: PayBillTableCols) => {
         return <DeleteButton onClick={() => deletePerson(b.id)} />;
       },
     },

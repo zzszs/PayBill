@@ -38,7 +38,6 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
   }
 
   const deleteItem = () => {
-    console.log(item.id)
     if (confirm(`Are you sure you want to delete ${item.name}`)) {
       dispatch(removeItem({id: item.id}))
     }
