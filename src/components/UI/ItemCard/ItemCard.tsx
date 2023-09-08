@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import style from "./style.module.css";
-import { Select, Button, InputNumber } from "antd";
+import { Select, Button, Form } from "antd";
 import { ListItem, Person } from "../../../types/types";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { getPersonsForItem } from "../../../app/slices/peopleSlice";
-import { addPersonToItem, changePersonPrice, removeItem, removePersonFromItem } from "../../../app/slices/itemListSlice";
+import { addPersonToItem, changePersonPrice, changePricesEqually, removeItem, removePersonFromItem } from "../../../app/slices/itemListSlice";
 import DeleteButton from "../DeleteButton/DeleteButton";
+import MoneyInput from "../MoneyInput/MoneyInput";
 
 const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
   const dispatch = useAppDispatch();
+  const [form] = Form.useForm()
   const selectOptions = useAppSelector((state) =>
     getPersonsForItem(state, item.people)
   );
@@ -43,6 +45,19 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
     }
   }
 
+  const splitEqually = () => {
+    if (item.people.length === 0) return
+    const peopleArray = [...item.people]
+    const totalPrice = item.price
+    const splitPrice = (totalPrice / peopleArray.length).toFixed(2)
+
+    for (let i = 0; i < peopleArray.length; i++) {
+      form.setFieldValue(`price-${peopleArray[i].id}`, splitPrice)
+    }
+    dispatch(changePricesEqually({id: item.id, price: splitPrice}))
+  }
+
+
   return (
     <div className={style.container}>
       <div className={style.title}>
@@ -50,24 +65,29 @@ const ItemCard: React.FC<{ item: ListItem }> = ({ item }) => {
         <p>{item.price}$</p>
         <DeleteButton onClick={deleteItem} />
       </div>
+      <div className={style.button_container}>
+        <Button size="small" onClick={splitEqually}>Split Equally</Button>
+      </div>
       <div className={style.inner_container}>
         {item.people.map((person) => (
-          <div className={style.person_contaienr} key={person.id}>
-            <InputNumber
-              addonAfter="$"
-              min={0}
-              controls={false}
-              onChange={(value) =>
-                setPersonPrice({
-                  ...person,
-                  price: parseFloat(`${value ? value : 0}`),
-                })
-              }
-              onBlur={updatePersonPrice}
-            />
+          <Form form={form} className={style.person_contaienr} key={person.id}>
+           <Form.Item className={style.form_item} name={`price-${person.id}`} >
+              <MoneyInput
+                addonAfter="$"
+                min={0}
+                controls={false}
+                onChange={(value) =>
+                  setPersonPrice({
+                    ...person,
+                    price: parseFloat(`${value ? value : 0}`),
+                  })
+                }
+                onBlur={updatePersonPrice}
+              />
+            </Form.Item>
             <p className={style.person_name}>{person.name}</p>
             <DeleteButton onClick={() => deletePersonFromItem(person.id)}/>
-          </div>
+          </Form>
         ))}
         <Select
           value={selectedOption}

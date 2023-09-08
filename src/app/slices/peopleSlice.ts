@@ -101,7 +101,7 @@ export const getPersonsForTable = createSelector(
       for (let j = 0; j < itemList.length; j++) {
         for (let k = 0; k < itemList[j].people.length; k++) {
           if (data[i].id === itemList[j].people[k].id) {
-            priceArray.push(itemList[j].people[k].price);
+            priceArray.push(parseFloat(`${itemList[j].people[k].price}`));
           }
         }
       }
@@ -113,7 +113,7 @@ export const getPersonsForTable = createSelector(
         key: data[i].id,
         name: data[i].name,
         iban: data[i].iban,
-        price: `${sum}$`,
+        price: `${sum.toFixed(2)}$`,
         action: 'action'
       });
     }

@@ -42,17 +42,28 @@ export const itemListSlice = createSlice({
         state[i].people = state[i].people.filter((person) => person.id !== action.payload.id)
       }
     },
+    changePricesEqually: (state, action) => {
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          for (let j = 0; j < state[i].people.length; j++) {
+            state[i].people[j].price = action.payload.price
+          }
+          state[i].error = { ...state[i].error, visible: false }
+        }
+      }
+    },
     changePersonPrice: (state, action) => {
       const allPrices = [];
       for (let i = 0; i < state.length; i++) {
         if (state[i].id === action.payload.id) {
           for (let j = 0; j < state[i].people.length; j++) {
             if (state[i].people[j].id === action.payload.person.id) {
-              state[i].people[j] = action.payload.person;
+              state[i].people[j] = {...action.payload.person, price: parseFloat(action.payload.person.price)};
             }
-            allPrices.push(state[i].people[j].price);
+            allPrices.push(parseFloat(`${state[i].people[j].price}`));
           }
           const sum = allPrices.reduce((acc, value) => acc + value);
+
           if (sum < state[i].price) {
             state[i].error = {
               text: "Total price is lower than price of the item",
@@ -74,7 +85,7 @@ export const itemListSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, addPersonToItem, removePersonFromItem, removePersonFromAllItems, changePersonPrice } =
+export const { addItem, removeItem, addPersonToItem, removePersonFromItem, removePersonFromAllItems, changePricesEqually, changePersonPrice } =
   itemListSlice.actions;
 
 export default itemListSlice.reducer;

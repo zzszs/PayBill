@@ -16,6 +16,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-family: sans-serif;
+}
+
+.button_container {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
 }
 
 .inner_container {
@@ -37,6 +44,10 @@
     margin: 0 10px;
 }
 
+.form_item {
+    margin-bottom: 0;
+}
+
 .error {
     color: red;
     transition: all ease-in-out .3s;
@@ -48,6 +59,8 @@
     opacity: 1;
     visibility: visible;
 }
+
+
 
 @media (min-width: 595px) {
     .container {
